@@ -33,6 +33,7 @@ During the navigation, before any guards or resolvers run, the router will dispa
 ```ts
 /**
  * Payload of ROUTER_NAVIGATION.
+ * ROUTER_NAVIGATION 的有效载荷 （携带的信息）
  */
 export declare type RouterNavigationPayload<T> = {
     routerState: T;
@@ -40,6 +41,7 @@ export declare type RouterNavigationPayload<T> = {
 };
 /**
  * An action dispatched when the router navigates.
+ * 路由导航开始时，action 将被派发出去 
  */
 export declare type RouterNavigationAction<T = RouterStateSnapshot> = {
     type: typeof ROUTER_NAVIGATION;
@@ -60,7 +62,7 @@ export declare type RouterNavigationAction<T = RouterStateSnapshot> = {
 - `ROUTER_ERROR` action 表示一个导航错误。
 
 - `ROUTER_CANCEL` and `ROUTER_ERROR` contain the store state before the navigation. Use the previous state to restore the consistency of the store.
-- `ROUTER_CANCEL` 和 `ROUTER_ERROR` 导航之前的 `store` 状态。 使用上一个状态来恢复 `store` 的一致性。
+- `ROUTER_CANCEL` 和 `ROUTER_ERROR` 包含了开始导航前的 `store` 状态。 使用上一个状态来恢复 `store` 的前后一致性。
 
 ## Setup
 ## 步骤

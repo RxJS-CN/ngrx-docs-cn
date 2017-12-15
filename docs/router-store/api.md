@@ -99,7 +99,7 @@ Additionally, the router state snapshot is a mutable object, which can cause iss
 
 To use the time-traveling debugging in the Devtools, you must return an object containing the `url` when using the `routerReducer`.
 
-想要在开发工具中使用时光穿梭功能的话，你必须在使用 `routerReducer` 时返回一个包含 `url` 对象。
+想要在开发工具中使用时光穿梭功能的话，你必须在使用 `routerReducer` 时返回一个包含 `url` 的对象。
 
 ```ts
 import { StoreModule, ActionReducerMap } from '@ngrx/store';
@@ -134,6 +134,7 @@ export class CustomSerializer implements RouterStateSerializer<RouterStateUrl> {
 
     // Only return an object including the URL, params and query params
     // instead of the entire snapshot
+    // 只返回 包含 URL 、 `params` 和 `query params` 而不是整个路由快照
     return { url, params, queryParams };
   }
 }

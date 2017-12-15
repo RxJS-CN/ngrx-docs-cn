@@ -29,13 +29,11 @@ Install @ngrx/store-devtools from npm:
 
 
 ## Instrumentation
-
-
 ## 仪表盘
 
 ### Instrumentation with the Chrome / Firefox Extension
 
-### 使用火狐、谷歌浏览器的插件查看监测
+### 使用火狐、谷歌浏览器的扩展查看路由的变更状态
 
 1. Download the [Redux Devtools Extension](http://zalmoxisus.github.io/redux-devtools-extension/)
 
@@ -43,7 +41,7 @@ Install @ngrx/store-devtools from npm:
 
 2. In your `AppModule` add instrumentation to the module imports using `StoreDevtoolsModule.instrument`:
 
-2. 在你的 `AppModule` 中通过在元数据中导入 `StoreDevtoolsModule.instrument` 添加仪表盘
+2. 在你的 `AppModule` 中通过在元数据 metaData 中导入 `StoreDevtoolsModule.instrument` 添加仪表盘
 
 ```ts
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -71,27 +69,27 @@ When you call the instrumentation, you can give an optional configuration object
 #### `maxAge`
 number (>1) | false - maximum allowed actions to be stored in the history tree. The oldest actions are removed once maxAge is reached. It's critical for performance. Default is `false` (infinite).
 
-`number` 型参数 或者 false - 配置允许存储在记录中的 `actions` 的最大值。达到最大值时，最早的 `action` 会被清除。 这个参数很影响性能。 默认值是 `false` ( 无限大)。
+`number` 型 ( 必须>1 ) 或者 false - 配置允许存储在记录中的 `actions` 的最大值。达到最大值时，最早的 `action` 会被清除。 这个参数很影响性能。 默认值是 `false` ( 表示无限大 )。
 
 #### `name`
 string - the instance name to be showed on the monitor page. Default value is _NgRx Store DevTools_.
 
-`string` 型参数 展示在仪表 监控面板上的实例名字。 默认是 _NgRx Store DevTools_ 。
+`string` 型 展示在仪表 监控面板上的实例名字。 默认是 _NgRx Store DevTools_ 。
 
 #### `monitor`:
 function - the monitor function configuration that you what to hook.
 
-`function` 型参数 - 配置你想劫持的监控函数
+`function` 型 - 配置你想劫持的监控函数
 
 #### `actionSanitizer`
 function which takes `action` object and id number as arguments, and should return `action` object back.
  
-`function` 型参数  入参 `action` 和 `Id` ， 返回 指定的 `action` 对象。 
+`function` 型  入参 `action` 和 `Id` ， 返回 指定的 `action` 对象。 
 
 #### `stateSanitizer`
 function which takes `state` object and index as arguments, and should return `state` object back.
 
-`function` 型参数  传入 `state` 对象 和 索引，返回 `state` 对象。
+`function` 型  传入 `state` 对象 和 索引，返回 `state` 对象。
 
 #### `serialize` 
 false | configuration object - Handle the way you want to serialize your state, [more information here](https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md#serialize). 
