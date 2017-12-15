@@ -119,7 +119,7 @@ export class CustomSerializer implements RouterStateSerializer<RouterStateUrl> {
     const queryParams = routerState.root.queryParams;
     const params = route.params;
 
-    // 只返回 包含 URL 、 `params` 和 `query params` 而不是整个路由快照
+    // 只返回 包含 URL 、 `params` 和 `query params` 的对象而不是整个路由快照
     return { url, params, queryParams };
   }
 }
