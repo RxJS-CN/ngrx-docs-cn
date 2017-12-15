@@ -82,7 +82,7 @@ export class RouterEffects {
 }
 ```
 ## 订制你的 Router State 序列化方式
-在每个导航的生命周期中，  `RouterStateSnapshot` 是由提供了一个有效载荷 ( payload ) 的 `state` 快照分发的`RouterNavigationAction`。 `RouterStateSnapshot` 是一个又大又复杂的结构，包含了当前状态的很多信息和路由都渲染了哪些内容。 当使用了 Store Devtools 的话可能会引起性能问题。 大多数的使用场景下，你可能仅需要的是 `RouterStateSnapshot` 提供的部分内容。那么想减少 `RouterStateSnapshot` 提供的信息或者只提供你想要的信息，你需要自己完成序列化的程序部分。
+在每个导航的生命周期中，  `RouterStateSnapshot` 是一个由提供了有效载荷 ( payload ) 的 `state` 快照分发的`RouterNavigationAction`。 `RouterStateSnapshot` 是一个又大又复杂的结构，包含了当前状态的很多信息和路由都渲染了哪些内容。 当使用了 Store Devtools 的话可能会引起性能问题。 大多数的使用场景下，你可能仅需要的是 `RouterStateSnapshot` 提供的部分内容。那么想减少 `RouterStateSnapshot` 提供的信息或者只提供你想要的信息，你需要自己完成序列化的程序部分。
 
 另外，路由的状态快照是一个可修改对象，这可能会造成一些问题，你可以使用 [store freeze](https://github.com/brandonroberts/ngrx-store-freeze) 来阻止状态的直接变化。
 
