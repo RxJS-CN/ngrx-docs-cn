@@ -50,29 +50,34 @@ store.dispatch(new RouterActions.Forward());
 ## Effects
 
 ```ts
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { Effect, Actions } from '@ngrx/effects';
+import { Effect, Actions, ofType } from '@ngrx/effects';
+import { map, tap } from 'rxjs/operators';
 import * as RouterActions from './actions/router';
 
 @Injectable()
 export class RouterEffects {
   @Effect({ dispatch: false })
-  navigate$ = this.actions$.ofType(RouterActions.GO)
-    .map((action: RouterActions.Go) => action.payload)
-    .do(({ path, query: queryParams, extras})
-      => this.router.navigate(path, { queryParams, ...extras }));
+  navigate$ = this.actions$.pipe(
+    ofType(RouterActions.GO),
+    map((action: RouterActions.Go) => action.payload),
+    tap(({ path, query: queryParams, extras})
+      => this.router.navigate(path, { queryParams, ...extras }))
+  )
 
   @Effect({ dispatch: false })
-  navigateBack$ = this.actions$.ofType(RouterActions.BACK)
-    .do(() => this.location.back());
+  navigateBack$ = this.actions$.pipe(
+    ofType(RouterActions.BACK),
+    tap(() => this.location.back())
+  );
 
   @Effect({ dispatch: false })
-  navigateForward$ = this.actions$.ofType(RouterActions.FORWARD)
-    .do(() => this.location.forward());    
+  navigateForward$ = this.actions$.pipe(
+    ofType(RouterActions.FORWARD),
+    tap(() => this.location.forward())
+  );
 
   constructor(
     private actions$: Actions,
@@ -81,12 +86,15 @@ export class RouterEffects {
   ) {}
 }
 ```
+
 ## 订制你的 Router State 序列化方式
 在每个导航的生命周期中，  `RouterStateSnapshot` 是一个由提供了有效载荷 ( payload ) 的 `state` 快照分发的`RouterNavigationAction`。 `RouterStateSnapshot` 是一个又大又复杂的结构，包含了当前状态的很多信息和路由都渲染了哪些内容。 当使用了 Store Devtools 的话可能会引起性能问题。 大多数的使用场景下，你可能仅需要的是 `RouterStateSnapshot` 提供的部分内容。那么想减少 `RouterStateSnapshot` 提供的信息或者只提供你想要的信息，你需要自己完成序列化的程序部分。
 
+
 另外，路由的状态快照是一个可修改对象，这可能会造成一些问题，你可以使用 [store freeze](https://github.com/brandonroberts/ngrx-store-freeze) 来阻止状态的直接变化。
 
-想要在开发工具中使用时光穿梭功能的话，你必须在使用 `routerReducer` 时返回一个包含 `url` 的对象。
+
+**注意**:想要在开发工具中使用时光穿梭功能的话，你必须在使用 `routerReducer` 时返回一个包含 `url` 的对象。
 
 ```ts
 import { StoreModule, ActionReducerMap } from '@ngrx/store';
@@ -105,19 +113,19 @@ export interface RouterStateUrl {
 }
 
 export interface State {
-  routerReducer: RouterReducerState<RouterStateUrl>;
+  router: RouterReducerState<RouterStateUrl>;
 }
 
 export class CustomSerializer implements RouterStateSerializer<RouterStateUrl> {
   serialize(routerState: RouterStateSnapshot): RouterStateUrl {
     let route = routerState.root;
+
     while (route.firstChild) {
       route = route.firstChild;
     }
 
-    const { url } = routerState;
-    const queryParams = routerState.root.queryParams;
-    const params = route.params;
+    const { url, root: { queryParams } } = routerState;
+    const { params } = route;
 
     // 只返回 包含 URL 、 `params` 和 `query params` 的对象而不是整个路由快照
     return { url, params, queryParams };
@@ -125,7 +133,7 @@ export class CustomSerializer implements RouterStateSerializer<RouterStateUrl> {
 }
 
 export const reducers: ActionReducerMap<State> = {
-  routerReducer: routerReducer
+  router: routerReducer
 };
 
 @NgModule({
@@ -134,7 +142,9 @@ export const reducers: ActionReducerMap<State> = {
     RouterModule.forRoot([
       // routes
     ]),
-    StoreRouterConnectingModule
+    StoreRouterConnectingModule.forRoot({
+      stateKey: 'router'
+    })
   ],
   providers: [
     { provide: RouterStateSerializer, useClass: CustomSerializer }

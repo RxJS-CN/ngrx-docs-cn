@@ -12,20 +12,22 @@
 ## 用法
 在路由导航跳转期间， 在任何的路由守卫和路由解析器执行之前，路由会触发一个有 `RouterNavigationAction` 签名的 `ROUTER_NAVIGATION` action：
 
+
 ```ts
 /**
  * ROUTER_NAVIGATION 的有效载荷 （携带的信息）
  */
 export declare type RouterNavigationPayload<T> = {
-    routerState: T;
-    event: RoutesRecognized;
+  routerState: T;
+  event: RoutesRecognized;
 };
+
 /**
  * 路由导航开始时，action 将被派发出去 
  */
 export declare type RouterNavigationAction<T = RouterStateSnapshot> = {
-    type: typeof ROUTER_NAVIGATION;
-    payload: RouterNavigationPayload<T>;
+  type: typeof ROUTER_NAVIGATION;
+  payload: RouterNavigationPayload<T>;
 };
 ```
 
@@ -39,22 +41,28 @@ export declare type RouterNavigationAction<T = RouterStateSnapshot> = {
 
 ```ts
 import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
-import { App } from './app.component';
+import { AppComponent } from './app.component';
 
 @NgModule({
   imports: [
     BrowserModule,
-    StoreModule.forRoot({ routerReducer: routerReducer }),
+    StoreModule.forRoot({
+      router: routerReducer
+    }),
     RouterModule.forRoot([
       // routes
     ]),
-    StoreRouterConnectingModule
+    StoreRouterConnectingModule.forRoot({
+      stateKey: 'router' // name of reducer key
+    })
   ],
-  bootstrap: [App]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
 ```
+
 ## API 文档
+
 - [Navigation actions](./api.md#navigation-actions)
 - [Effects](./api.md#effects)
 - [定制你的 state 序列化部分](./api.md#custom-router-state-serializer)

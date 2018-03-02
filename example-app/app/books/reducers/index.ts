@@ -11,7 +11,7 @@ export interface BooksState {
 }
 
 export interface State extends fromRoot.State {
-  'books': BooksState;
+  books: BooksState;
 }
 
 export const reducers = {
@@ -29,9 +29,9 @@ export const reducers = {
  *
  * ```ts
  * class MyComponent {
- * 	constructor(state$: Observable<State>) {
- * 	  this.booksState$ = state$.select(getBooksState);
- * 	}
+ *   constructor(state$: Observable<State>) {
+ *     this.booksState$ = state$.pipe(select(getBooksState));
+ *   }
  * }
  * ```
  */
@@ -39,7 +39,7 @@ export const reducers = {
 /**
  * The createFeatureSelector function selects a piece of state from the root of the state object.
  * This is used for selecting feature states that are loaded eagerly or lazily.
-*/
+ */
 export const getBooksState = createFeatureSelector<BooksState>('books');
 
 /**
@@ -66,7 +66,7 @@ export const getSelectedBookId = createSelector(
  * commonly used selector functions including
  * getting all ids in the record set, a dictionary
  * of the records by id, an array of records and
- * the total number of records. This reducers boilerplate
+ * the total number of records. This reduces boilerplate
  * in selecting records from the entity state.
  */
 export const {
