@@ -29,7 +29,7 @@ Provide the path to a file containing an `Angular Module` and the entity reducer
 
 - `--module`
   - Alias: `-m`
-  - Type: `boolean`
+  - Type: `string`
 
 Provide the path to a `reducers` file containing a state interface and a object map of action reducers. The generated entity interface will be imported added to the first defined interface within the file. The entity reducer will be imported and added to the first defined object with an `ActionReducerMap` type.
 
@@ -55,7 +55,7 @@ ng generate entity User --reducers reducers/index.ts
 Generate a set of `User` entity files within a nested folder
 
 ```sh
-ng generate action User --flat false
+ng generate entity User --flat false
 ```
 
 Generate a set of `User` entity files and register it within the `Angular Module` in `app.module.ts` as a feature state.

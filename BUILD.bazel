@@ -1,0 +1,26 @@
+package(default_visibility = ["//visibility:public"])
+
+# Needed so that tsconfig.json can be referenced from BUILD rules.
+exports_files(["tsconfig.json"])
+
+filegroup(
+    name = "ngrx_test_dependencies",
+    # NB: rxjs is not in this list, because we build it from sources using the
+    # label @rxjs//:rxjs
+    srcs = glob(["/".join([
+        "node_modules",
+        pkg,
+        "**",
+        ext,
+    ]) for pkg in [
+        "@angular",
+        "jasmine",
+        "jasmine-marbles",
+        "typescript",
+        "@types",
+    ] for ext in [
+        "*.js",
+        "*.json",
+        "*.d.ts",
+    ]]),
+)

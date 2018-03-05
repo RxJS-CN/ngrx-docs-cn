@@ -68,7 +68,7 @@ export class AuthEffects {
 }
 ```
 
-2. Register the EffectsModule in your application root imports. This NgModule *must* be added to
+2. Register the EffectsModule in your application root imports. This EffectsModule *must* be added to
 your root `NgModule` for the effects providers to be registered and start when your application is loaded.
 
 ```ts
@@ -103,5 +103,6 @@ export class AdminModule {}
 - [Controlling Effects](./api.md#controlling-effects)
 - [Filtering Actions](./api.md#oftype)
 - [Non-dispatching effects](./api.md#non-dispatching-effects)
+- [Initializing effect](./api.md#initializing-effect)
 - [Utilities](./api.md#utilities)
 - [Testing](./testing.md)
