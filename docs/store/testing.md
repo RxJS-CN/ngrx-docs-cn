@@ -1,11 +1,11 @@
-# Testing
+# 测试
 
-### Providing Store for testing
-Use the `StoreModule.forRoot` in your `TestBed` configuration when testing components or services that inject `Store`.
+### 为测试提供 Store
+在测试组件或服务时通过在 `TestBed` 配置中使用 `StoreModule.forRoot` 来注入 `Store`。
 
-* Reducing state is synchronous, so mocking out the `Store` isn't required.
-* Use the `combineReducers` method with the map of feature reducers to compose the `State` for the test.
-* Dispatch actions to load data into the `Store`.
+* 归并状态的操作是同步的，所以模拟 `Store` 并不是必需的。
+* 通过使用 `combineReducers` 方法和功能模块的 `reducers` 映射来组成测试使用的 `State`。
+* 通过 `dispatch(action)` 往 `Store` 中加载数据。
 
 my-component.ts
 ```ts

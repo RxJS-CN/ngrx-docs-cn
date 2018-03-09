@@ -1,8 +1,7 @@
 # @ngrx/store
 
-### Setup
-Create a reducer function for each data type you have in your application. The combination of these reducers will
-make up your application state:
+### 准备步骤
+为你的应用中的每种数据类型创建一个 `reducer` 函数，这些 `reducers` 组合起来之后就构成了你的应用的状态。
 
 ```ts
 // counter.ts
@@ -29,8 +28,7 @@ export function counter(state: number = 0, action: Action) {
 }
 ```
 
-To register the global state container within your application, import those reducers and use the `StoreModule.forRoot`
-function in the `imports` array them in the `AppModule`.
+为了在你的应用中注册全局的状态容器，导入那些 `reducers` 然后在 `AppModule` 中的 `imports` 数组中使用 `StoreModule.forRoot` 函数。
 
 ```ts
 import { NgModule } from '@angular/core'
@@ -46,9 +44,7 @@ import { counter } from './counter';
 export class AppModule {}
 ```
 
-
-You can then inject the `Store` service into your components and services. Use `store.select` to
-_select_ slice(s) of state:
+你可以在你的组件或者服务中注入 `Store` 服务，使用 `store.select` 来挑选出状态的某一部分。
 
 ```ts
 import { Store, select } from '@ngrx/store';
