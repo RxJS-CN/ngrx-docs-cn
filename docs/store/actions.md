@@ -2,7 +2,7 @@
 
 ## Action reducers
 
-Provide the `ActionReducerMap<T>` with your reducer map for added type checking.
+通过给你的 reducer 映射提供 `ActionReducerMap<T>` 来添加类型检查。
 
 ```ts
 import { ActionReducerMap } from '@ngrx/store';
@@ -17,9 +17,9 @@ export const reducers: ActionReducerMap<State> = {
 };
 ```
 
-## Typed Actions
+## 类型化的 Actions
 
-Use strongly typed actions to take advantage of TypeScript's compile-time checking.
+使用强类型的 `actions` 来发挥 `TypeScript` 的编译时检查的优势。
 
 ```ts
 // counter.actions.ts
@@ -51,7 +51,7 @@ export type CounterActions
   | Reset;
 ```
 
-This provides typed actions for your reducer functions.
+这个给你的 `reducer` 函数提供了类型化的 `actions`
 
 ```ts
 // counter.reducer.ts
@@ -68,7 +68,7 @@ export function reducer(state: number = 0, action: CounterActions): State {
     }
 
     case CounterActionTypes.RESET: {
-      return action.payload; // typed to number
+      return action.payload; // number 类型
     }
 
     default: {
@@ -78,7 +78,7 @@ export function reducer(state: number = 0, action: CounterActions): State {
 }
 ```
 
-Instantiate actions and use `store.dispatch()` to dispatch them:
+实例化 `actions` 并使用 `store.dispatch()` 来 `dispatch` 它们。
 
 ```ts
 import { Store, select } from '@ngrx/store';

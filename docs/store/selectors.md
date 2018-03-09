@@ -1,15 +1,14 @@
-# Selectors
+# 选择器（Selectors）
 
-Selectors are methods used for obtaining slices of store state. @ngrx/store provides a few helper functions for optimizing this selection.
+选择器是用来得到状态中某一部分切片的方法，`@ngrx/store` 提供了一些帮助函数（helper function）来优化选取。
 
-When using the `createSelector` and `createFeatureSelector`functions @ngrx/store keeps track of the latest arguments in which your selector function was invoked. Because selectors are [pure functions](https://en.wikipedia.org/wiki/Pure_function), the last result can be returned when the arguments match without reinvoking your selector function. This can provide performance benefits, particularly with selectors that perform expensive computation. This practice is known as [memoization](https://en.wikipedia.org/wiki/Memoization).
+当使用 `createSelector` 和 `createFeatureSelector` 函数时，`@ngrx/store` 会记录上一次选择器函数调用的参数，因为选择器是[纯函数](https://en.wikipedia.org/wiki/Pure_function)，所以当参数相同时，可以直接返回上一次的结果，而不需要重新调用你的选择器函数，这样可以在性能方面带来好处，尤其是当选择器函数需要执行大量的计算时，这种做法被称为[memoization](https://en.wikipedia.org/wiki/Memoization)。
 
 ## createSelector
 
-The `createSelector` method returns a callback function for selecting a slice of state.
+`createSelector` 方法返回一个用来选取状态切片的回调函数。
 
-
-### Example
+### 示例
 
 ```ts
 // reducers.ts
@@ -27,20 +26,20 @@ export const selectFeature = (state: AppState) => state.feature;
 export const selectFeatureCount = createSelector(selectFeature, (state: FeatureState) => state.counter);
 ```
 
+### 为多个状态切片使用选择器
 
-### Using selectors for multiple pieces of state
+`createSelector` 可以用来根据同一状态的几个切片从状态中选取一些数据。
 
-The `createSelector` can be used to select some data from the state based on several slices of the same state.
+`createSelector` 函数最多可以使用 8 个选择器函数来获得更完整的状态选择。
 
-The `createSelector` function can take up to 8 selector function for more complete state selections.
+例如，想象一下在你的状态中，有一个 `selectedUser` 对象，还有一个包含 `book` 对象的 `allBooks` 数组。
 
-For example, imagine you have a `selectedUser` object in the state. You also have an `allBooks` array of book objects.
 
-And you want to show all books for the current user.
+你希望能够展示当前用户下的所有书籍。
 
-You can use the `createSelector` to achieve just that. Your visible books will always be up to date even if you update them in `allBooks` and they will always show the books that belong to your user if there is one selected, and will show all the books when there is no user selected.
+你可以使用 `createSelector` 来实现这一点。只要有被选择的用户，可见的书籍将始终处于最新状态，甚至当你在 `allBooks` 中更新了它们。如果没有用户被选择则显示所有的书籍。
 
-The result will be just some of your state filtered by another section of the state. And it will be always up to date.
+这个结果将只是被状态中另一部分所过滤的状态中的一部分，而且会始终保持最新状态。
 
 ```ts
 // reducers.ts
@@ -76,9 +75,9 @@ export const selectVisibleBooks = createSelector(selectUser, selectAllBooks, (se
 
 ## createFeatureSelector
 
-The `createFeatureSelector` is a convenience method for returning a top level feature state. It returns a typed selector function for a feature slice of state.
+`createFeatureSelector` 是一种返回顶级功能模块状态的便捷方法，它为状态的功能模块切片（feature slice of state）返回一个类型化的选择器函数。
 
-### Example
+### 示例
 
 ```ts
 // reducers.ts
@@ -97,9 +96,9 @@ export const selectFeatureCount = createSelector(selectFeature, (state: FeatureS
 
 ```
 
-## Reset Memoized Selector
+## 重置带缓存值的选择器（Reset Memoized Selector）
 
-The selector function returned by calling `createSelector` or `createFeatureSelector` initially has a memoized value of `null`. After a selector is invoked the first time its memoized value is stored in memory. If the selector is subsequently invoked with the same arguments it will return the memoized value. If the selector is then invoked with different arguments it will recompute, and update its memoized value. Consider the following:
+通过调用 `createSelector` 或者 `createFeatureSelector` 返回的选择器函数最初有一个为 `null` 的缓存值（memoized value），当一个选择器第一次被调用后它的缓存值（memoized value）会被存储在内存中，如果这个选择器随后被通过相同的参数调用就会直接返回这个缓存值（memoized value），如果这个选择器被通过不同的参数调用就会重新计算一次，并更新它的缓存值（memoized value），请看下面：
 
 ```ts
 import { createSelector } from '@ngrx/store';
@@ -115,24 +114,28 @@ export const selectTotal = createSelector(
   selectCounter1,
   selectCounter2,
   (counter1, counter2) => counter1 + counter2
-); // selectTotal has a memoized value of null, because it has not yet been invoked.
+); // selectTotal 有一个为 null 的缓存值（memoized value），因为它还没有被调用。
 
 let state = { counter1: 3, counter2: 4 };
 
-selectTotal(state); // computes the sum of 3 & 4, returning 7. selectTotal now has a memoized value of 7
-selectTotal(state); // does not compute the sum of 3 & 4. selectTotal instead returns the memoized value of 7
+selectTotal(state); // 计算 3，4 的和，返回 7。selectTotal 现在有了一个为 7 的缓存值（memoized value）。
+selectTotal(state); // 不再计算 3,4 的和，selectTotal 直接返回缓存值（memoized value） 7
 
 state = { ...state, counter2: 5 };
 
-selectTotal(state); // computes the sum of 3 & 5, returning 8. selectTotal now has a memoized value of 8
+selectTotal(state); // 计算 3，5 的和，返回 8。selectTotal 现在有了一个为 8 的缓存值（memoized value）。
 
 ```
-A selector's memoized value stays in memory indefinitely. If the memoized value is, for example, a large dataset that is no longer needed it's possible to reset the memoized value to null so that the large dataset can be removed from memory. This can be accomplished by invoking the `release` method on the selector.
+
+选择器中的缓存值（memoized value ） 会无限期地保留在内存中，如果缓存值是不再需要的大数据集，则可以通过将缓存值（memoized value）重置为 null，以便可以将大数据集从内存中移除，这个可以通过调用选择器上的 `release` 方法来完成。
+
 ```ts
-selectTotal(state); // returns the memoized value of 8
-selectTotal.release() // memoized value of selectTotal is now null
+selectTotal(state); // 返回缓存值 8
+selectTotal.release() // selectTotal 的缓存值现在为 null
 ```
-Releasing a selector also recursively releases any ancestor selectors. Consider the following:
+
+释放一个选择器会同时释放它的所有祖先选择器。请看下面：
+
 ```ts
 export interface State {
   evenNums: number[];
@@ -159,7 +162,7 @@ selectTotal({
 });
 
 /**
- * Memoized Values before calling selectTotal.release()
+ * 调用 selectTotal.release() 之前的缓存值
  *   selectSumEvenNums  6
  *   selectSumOddNums   4
  *   selectTotal        10
@@ -168,18 +171,18 @@ selectTotal({
 selectTotal.release();
 
 /**
- * Memoized Values after calling selectTotal.release()
+ * 调用 selectTotal.release() 之后的缓存值
  *   selectSumEvenNums  null
  *   selectSumOddNums   null
  *   selectTotal        null
  */
 ```
 
-## Using a Selector with the Store
-
-The functions returned by the `createSelector` and `createFeatureSelector` methods become alternatives to the string syntax for retrieving the relevant piece of state.
-
-### Example
+## 通过 Store 使用选择器
+ 
+ `createSelector` 和 `createFeatureSelector` 方法返回的函数作为检索状态中相应部分的字符串语法的替代方法。
+ 
+### 示例
 
 ```ts
 // app.component.ts
